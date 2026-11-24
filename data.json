@@ -1,9 +1,478 @@
 {
   "schema_version": 1,
-  "generated_at": null,
-  "reference_time_utc": null,
+  "generated_at": "2026-11-24T23:30:23Z",
+  "reference_time_utc": "2026-11-24T22:00:00Z",
   "source": "Open-Meteo Forecast API (modeled / interpolated data, not station observations)",
   "period_note": "Seven consecutive 24-hour periods, each ending at the same UTC hour; last period is the past 24 hours.",
-  "zones": [],
+  "zones": [
+    {
+      "id": "chic-chocs",
+      "name": "Chic-Chocs",
+      "location": "Gaspésie, Québec",
+      "region": "East",
+      "lat": 48.9436,
+      "lon": -66.1211,
+      "agency": "Avalanche Québec",
+      "forecast_url": "https://avalanchequebec.ca/bulletin-davalanche/",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Check that the selected route is inside the bulletin's coverage area.",
+      "grid_elevation_m": 218.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 0.0,
+      "snow_depth_cm": 0.0,
+      "temperature_c": -5.7,
+      "wind_speed_kmh": 26.2,
+      "wind_direction_deg": 308.0,
+      "wind_gust_kmh": 54.0,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "laurentians",
+      "name": "Laurentians",
+      "location": "Montagne Noire · St-Donat, Québec",
+      "region": "East",
+      "lat": 46.3264,
+      "lon": -74.2625,
+      "agency": "Avalanche Québec",
+      "forecast_url": "https://avalanchequebec.ca/",
+      "forecast_kind": "resource",
+      "forecast_note": "No Avalanche Québec bulletin is published for St-Donat; this is a general safety resource.",
+      "grid_elevation_m": 594.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 0.0,
+      "snow_depth_cm": 0.0,
+      "temperature_c": -5.8,
+      "wind_speed_kmh": 5.1,
+      "wind_direction_deg": 293.0,
+      "wind_gust_kmh": 20.9,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "tuckerman",
+      "name": "Tuckerman Ravine",
+      "location": "Mount Washington, New Hampshire",
+      "region": "East",
+      "lat": 44.2611,
+      "lon": -71.2981,
+      "agency": "Mount Washington Avalanche Center",
+      "forecast_url": "https://www.mountwashingtonavalanchecenter.org/",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Forecasts may be replaced by general avalanche information early or late in the season.",
+      "grid_elevation_m": 1429.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 0.0,
+      "snow_depth_cm": 0.0,
+      "temperature_c": -10.1,
+      "wind_speed_kmh": 39.3,
+      "wind_direction_deg": 300.0,
+      "wind_gust_kmh": 67.0,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "adirondacks",
+      "name": "Adirondacks",
+      "location": "Mount Marcy, New York",
+      "region": "East",
+      "lat": 44.1127,
+      "lon": -73.9237,
+      "agency": "New York DEC",
+      "forecast_url": "https://dec.ny.gov/things-to-do/hiking/adirondack-backcountry/backcountry-information-for-adirondack-park",
+      "forecast_kind": "resource",
+      "forecast_note": "NY DEC backcountry conditions and alerts; not a location-specific avalanche danger bulletin.",
+      "grid_elevation_m": 1601.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 0.0,
+      "snow_depth_cm": 0.0,
+      "temperature_c": -10.8,
+      "wind_speed_kmh": 26.1,
+      "wind_direction_deg": 317.0,
+      "wind_gust_kmh": 45.0,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "rogers-pass",
+      "name": "Rogers Pass",
+      "location": "Glacier National Park, British Columbia",
+      "region": "West",
+      "lat": 51.3003,
+      "lon": -117.52,
+      "agency": "Parks Canada / Avalanche Canada",
+      "forecast_url": "https://avalanche.ca/en/forecasts",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Select Glacier National Park; check the Parks Canada winter permit and access restrictions.",
+      "grid_elevation_m": 1317.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 1.7,
+      "snow_depth_cm": 28.0,
+      "temperature_c": 0.6,
+      "wind_speed_kmh": 1.4,
+      "wind_direction_deg": 230.0,
+      "wind_gust_kmh": 25.9,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.6
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 1.1
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "loveland-pass",
+      "name": "Loveland Pass",
+      "location": "Front Range, Colorado",
+      "region": "West",
+      "lat": 39.6636,
+      "lon": -105.8792,
+      "agency": "Colorado Avalanche Information Center",
+      "forecast_url": "https://www.avalanche.state.co.us/forecasts",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Select the applicable Front Range avalanche forecast zone.",
+      "grid_elevation_m": 3629.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.6,
+      "snow_7d_cm": 1.9,
+      "snow_depth_cm": 0.0,
+      "temperature_c": -5.7,
+      "wind_speed_kmh": 21.3,
+      "wind_direction_deg": 302.0,
+      "wind_gust_kmh": 34.6,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 1.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.3
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.6
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "wasatch",
+      "name": "Wasatch Backcountry",
+      "location": "Alta · Brighton, Utah",
+      "region": "West",
+      "lat": 40.5885,
+      "lon": -111.638,
+      "agency": "Utah Avalanche Center",
+      "forecast_url": "https://utahavalanchecenter.org/forecast/salt-lake",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Salt Lake Area Mountains bulletin.",
+      "grid_elevation_m": 2606.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 36.2,
+      "snow_depth_cm": 42.0,
+      "temperature_c": -0.4,
+      "wind_speed_kmh": 8.2,
+      "wind_direction_deg": 299.0,
+      "wind_gust_kmh": 7.6,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 8.8
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 6.6
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 19.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 1.8
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "tetons",
+      "name": "Tetons",
+      "location": "Teton Pass, Wyoming",
+      "region": "West",
+      "lat": 43.4975,
+      "lon": -110.9552,
+      "agency": "Bridger-Teton Avalanche Center",
+      "forecast_url": "https://bridgertetonavalanchecenter.org/",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Select the Teton forecast area and consult current access alerts.",
+      "grid_elevation_m": 2570.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 0.0,
+      "snow_7d_cm": 17.3,
+      "snow_depth_cm": 33.0,
+      "temperature_c": -2.4,
+      "wind_speed_kmh": 8.1,
+      "wind_direction_deg": 307.0,
+      "wind_gust_kmh": 23.0,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 3.6
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 1.1
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 4.5
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 8.1
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 0.0
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "mount-baker",
+      "name": "Mount Baker",
+      "location": "North Cascades, Washington",
+      "region": "West",
+      "lat": 48.857,
+      "lon": -121.6695,
+      "agency": "Northwest Avalanche Center",
+      "forecast_url": "https://nwac.us/",
+      "forecast_kind": "bulletin",
+      "forecast_note": "Choose the West Slopes North / Mt. Baker forecast area.",
+      "grid_elevation_m": 1351.0,
+      "sample_time_utc": "2026-11-24T22:00:00Z",
+      "snow_24h_cm": 11.4,
+      "snow_7d_cm": 16.2,
+      "snow_depth_cm": 27.0,
+      "temperature_c": 3.1,
+      "wind_speed_kmh": 36.9,
+      "wind_direction_deg": 171.0,
+      "wind_gust_kmh": 69.1,
+      "snowfall_7d": [
+        {
+          "date": "2026-11-18",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-19",
+          "snowfall_cm": 0.3
+        },
+        {
+          "date": "2026-11-20",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-21",
+          "snowfall_cm": 0.0
+        },
+        {
+          "date": "2026-11-22",
+          "snowfall_cm": 2.0
+        },
+        {
+          "date": "2026-11-23",
+          "snowfall_cm": 2.5
+        },
+        {
+          "date": "2026-11-24",
+          "snowfall_cm": 11.4
+        }
+      ],
+      "error": null
+    }
+  ],
   "errors": []
 }

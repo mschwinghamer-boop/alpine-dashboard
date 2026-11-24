@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "generated_at": null,
+  "reference_time_utc": null,
+  "source": "Open-Meteo Forecast API (modeled / interpolated data, not station observations)",
+  "period_note": "Seven consecutive 24-hour periods, each ending at the same UTC hour; last period is the past 24 hours.",
+  "zones": [],
+  "errors": []
+}

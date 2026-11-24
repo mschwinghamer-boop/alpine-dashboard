@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111e">
+  <meta name="description" content="Nine North American backcountry ski zones: modeled snow, wind, temperature, seven-day trends, and links to official avalanche information.">
+  <title>Alpine Dashboard — Backcountry Snow Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <style>
+    :root { color-scheme: dark; --bg: #07111e; --surface: #0c1a2a; --surface2: #122336; --border: #263749; --muted: #96aabe; --cyan: #61e0ee; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background: var(--bg); color: #e7f1fb; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-width: 320px; }
+    body::before { content: ""; pointer-events: none; position: fixed; inset: 0 0 auto; height: 650px; z-index: -1;
+      background: radial-gradient(ellipse at 73% 8%, #16446180 0, transparent 48%), radial-gradient(ellipse at 8% 3%, #12334a88 0, transparent 37%); }
+    .page { max-width: 1300px; margin: auto; padding: 0 28px 64px; }
+    .nav { min-height: 91px; display:flex; align-items:center; justify-content:space-between; gap:18px; border-bottom:1px solid #ffffff19; }
+    .logo-badge { width: 49px; height:49px; border-radius:15px; display:grid; place-items:center; background:linear-gradient(135deg,#67e5f3,#289dbd); color:#052a35; box-shadow: 0 6px 28px #45cad627; }
+    .eyebrow { text-transform:uppercase; color:#69dce7; letter-spacing:.18em; font-size:11px; font-weight:800; }
+    .brand { font-size:18px; font-weight:850; line-height:1.08; letter-spacing:.035em; }
+    .brand span { display:block; font-size:10px; color:#8ca5b9; font-weight:700; letter-spacing:.2em; margin-top:5px; }
+    .nav-right { display:flex; align-items:center; gap:17px; }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:#55dabd; box-shadow:0 0 0 4px #55dabd1c; }
+    .muted { color:var(--muted); }
+    .refresh { border:1px solid #3a5267; border-radius:12px; padding:10px 13px; font-size:12px; font-weight:700; display:flex; gap:8px; align-items:center; transition:background .18s, border-color .18s; }
+    .refresh:hover { background:#173149; border-color:#69dce7; }
+    .refresh:focus-visible, .toggle:focus-visible, .forecast-link:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .refresh:disabled { opacity:.55; cursor:wait; }
+    .spin svg { animation: spin .8s linear infinite; }
+    @keyframes spin { to {transform:rotate(360deg);} }
+    .intro { padding-top:46px; padding-bottom:28px; display:flex; justify-content:space-between; align-items:end; gap:24px; }
+    .intro h1 { font-size:clamp(32px,4.4vw,55px); letter-spacing:-.048em; line-height:1.09; font-weight:850; margin:12px 0 13px; }
+    .intro h1 em { color:#8decf4; font-style:normal; }
+    .intro p { max-width:650px; font-size:14px; line-height:1.75; color:#93a8bc; }
+    .intro-side { flex-shrink:0; display:flex; align-items:center; gap:8px; font-size:11px; color:#9db1c4; border:1px solid #2b4255; padding:10px 13px; border-radius:50px; margin-bottom:8px; }
+    .intro-side svg { color:#73d7e3; }
+    .hero { position:relative; isolation:isolate; overflow:hidden; display:grid; grid-template-columns: minmax(0, 1fr) 295px; min-height:260px;
+      background:linear-gradient(110deg,#0f4356,#14445b 58%,#175b70); border:1px solid #2e7b88; border-radius:22px; box-shadow:0 23px 70px #00000021; }
+    .hero::after { content:""; position:absolute; z-index:-1; inset:0; opacity:.34;
+      background-image: linear-gradient(#a4f4fa0c 1px,transparent 1px),linear-gradient(90deg,#a4f4fa0c 1px,transparent 1px);
+      background-size:34px 34px; mask-image:linear-gradient(90deg,transparent,black); }
+    .hero-copy { padding:35px 39px; display:flex; flex-direction:column; justify-content:space-between; gap:23px; }
+    .hero-label { display:inline-flex; align-items:center; gap:8px; background:#b8fbef20; color:#abf7e9; border:1px solid #a2ffe737; font-size:10px; font-weight:850; letter-spacing:.15em; padding:9px 12px; border-radius:99px; width:max-content; }
+    .hero-title { font-size:clamp(24px,3.2vw,39px); font-weight:850; letter-spacing:-.035em; line-height:1.15; margin-top:16px; }
+    .hero-location { margin-top:9px; color:#c0e0e7; font-size:14px; }
+    .hero-foot { font-size:11px; color:#b0d6e1; }
+    .hero-score { padding:25px 32px; border-left:1px solid #ccffff2b; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; position:relative; overflow:hidden; }
+    .hero-score::after { content:"✳"; font-size:210px; line-height:1; position:absolute; right:-29px; top:-48px; opacity:.08; pointer-events:none; }
+    .score-number { font-size:84px; font-weight:900; letter-spacing:-.075em; line-height:1; font-variant-numeric:tabular-nums; }
+    .score-unit { color:#b7e5ef; font-size:21px; font-weight:800; margin-left:9px; }
+    .score-caption { margin-top:16px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#b5dde8; font-weight:800; }
+    .score-note { font-size:12px; margin-top:8px; color:#c3dde3; }
+    .metrics-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin-top:16px; }
+    .metric { border:1px solid var(--border); background:#0e1d2c; border-radius:16px; padding:19px 19px 18px; min-width:0; }
+    .metric-kicker { font-size:11px; color:#92aabd; font-weight:650; display:flex; align-items:center; gap:8px; }
+    .metric-kicker svg { color:#7bcde0; }
+    .metric-value { font-size:26px; font-weight:850; margin-top:8px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .metric-sub { color:#7f9aac; font-size:11px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .section-top { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-top:42px; margin-bottom:20px; }
+    .section-top h2 { font-size:23px; font-weight:800; letter-spacing:-.035em; margin:5px 0 3px; }
+    .section-top p { font-size:12px; color:#90a9bc; }
+    .controls { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .toggle-group { display:flex; align-items:center; padding:4px; border:1px solid #34485b; background:#111f30; border-radius:12px; gap:3px; }
+    .toggle { font-weight:700; font-size:12px; color:#91a9bf; padding:9px 13px; border:0; border-radius:9px; transition:background .2s,color .2s; }
+    .toggle:hover { color:white; }
+    .toggle[aria-pressed="true"] { background:#254658; color:#9df4f4; box-shadow:0 2px 8px #00000033; }
+    .cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .zone-card { border:1px solid #293a4c; background:linear-gradient(160deg,#101f30,#0c1a29 79%); border-radius:19px; padding:22px; min-width:0; transition:transform .2s,border-color .2s; }
+    .zone-card:hover { transform:translateY(-3px); border-color:#457083; }
+    .zone-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .zone-region { color:#6edfe9; font-size:10px; text-transform:uppercase; letter-spacing:.16em; font-weight:850; }
+    .zone-name { font-size:19px; font-weight:800; line-height:1.28; letter-spacing:-.02em; margin-top:7px; }
+    .zone-location { color:#89a1b5; font-size:11px; margin-top:6px; line-height:1.45; min-height:30px; }
+    .snow-icon { width:40px; height:40px; display:grid; place-items:center; border-radius:12px; background:#193747; color:#8fe6eb; flex-shrink:0; }
+    .snow-main { margin-top:22px; display:flex; align-items:baseline; gap:8px; }
+    .snow-main strong { font-size:43px; font-weight:850; letter-spacing:-.06em; line-height:1; font-variant-numeric:tabular-nums; }
+    .snow-main span { font-size:12px; color:#8fa9b9; font-weight:650; }
+    .small-label { text-transform:uppercase; color:#7e9aae; font-size:10px; letter-spacing:.13em; font-weight:750; }
+    .snow-micro { margin-top:12px; display:flex; gap:8px; align-items:center; justify-content:space-between; }
+    .spark { height:28px; width:94px; display:flex; align-items:flex-end; justify-content:flex-end; gap:4px; }
+    .spark > i { display:block; flex:1; max-width:10px; min-height:2px; background:#3c8093; border-radius:3px 3px 1px 1px; }
+    .spark > i:last-child { background:#71e3ed; }
+    .tags { display:flex; flex-wrap:wrap; gap:6px; min-height:25px; margin-top:20px; }
+    .tag { font-size:10px; padding:5px 9px; border-radius:99px; font-weight:800; letter-spacing:.015em; line-height:1.4; }
+    .tag.powder { background:#104a3f; color:#77f6d0; }
+    .tag.wind { background:#573923; color:#ffc28c; }
+    .tag.normal { background:#1a3244; color:#9ac8de; }
+    .tag.warning { background:#4c3c2b; color:#e8c58f; }
+    .card-divider { height:1px; background:#263848; margin:19px 0 16px; }
+    .details { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .detail { min-width:0; }
+    .detail b { display:block; font-size:16px; font-weight:800; letter-spacing:-.025em; white-space:nowrap; margin:7px 0 3px; font-variant-numeric:tabular-nums; }
+    .detail span { color:#718ea4; font-size:10px; line-height:1.35; display:block; }
+    .detail .secondary { color:#91abbe; font-weight:550; }
+    .forecast-link { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:22px; color:#aff2f6; border:1px solid #345365; border-radius:11px; background:#173246; padding:12px 13px; font-size:12px; font-weight:800; text-decoration:none; transition:background .2s; }
+    .forecast-link:hover { background:#1c4557; }
+    .forecast-agency { color:#7995a7; font-size:10px; margin-top:10px; line-height:1.45; }
+    .chart-area { margin-top:45px; background:#0d1c2a; border:1px solid #293d4c; border-radius:20px; padding:25px 28px 23px; }
+    .chart-header { display:flex; justify-content:space-between; align-items:center; gap:15px; }
+    .chart-header h2 { font-size:22px; font-weight:800; letter-spacing:-.03em; }
+    .chart-header p { color:#8ca7ba; font-size:12px; margin-top:6px; line-height:1.65; }
+    .chart-caption { border:1px solid #315268; background:#163145; border-radius:99px; padding:8px 12px; color:#a2ccdd; font-size:10px; font-weight:800; white-space:nowrap; }
+    .chart-wrap { position:relative; height:365px; margin-top:25px; }
+    .chart-empty { position:absolute; inset:0; display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:#94adbf; text-align:center; font-size:13px; }
+    .chart-empty.visible { display:flex; }
+    .safety { margin-top:25px; border:1px solid #405161; border-radius:16px; background:#121f2e; padding:18px 21px; display:flex; align-items:flex-start; gap:13px; }
+    .safety svg { flex-shrink:0; margin-top:1px; color:#edc18e; }
+    .safety strong { font-size:12px; display:block; color:#e5e8e8; margin-bottom:5px; }
+    .safety p { color:#91aabd; font-size:12px; line-height:1.7; }
+    footer { padding-top:28px; color:#748da1; font-size:11px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    footer a { color:#8fe2eb; text-decoration:underline; text-underline-offset:3px; }
+    @media (max-width: 1050px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); } .hero {grid-template-columns:minmax(0,1fr) 240px;} .score-number {font-size:70px;} }
+    @media (max-width: 730px) { .page {padding:0 18px 46px;} .nav {min-height:77px;} .brand {font-size:15px;} .logo-badge {width:43px;height:43px;} .nav-status {display:none;} .intro {padding:35px 0 25px;} .intro-side {display:none;} .hero {grid-template-columns:1fr;} .hero-copy {padding:25px 26px 18px;} .hero-score {padding:10px 26px 25px;border-left:0;border-top:1px solid #ccffff2b;display:block;} .score-number {font-size:54px;} .score-caption {margin-top:9px;} .score-note {display:inline; margin-left:8px;} .metrics-strip {grid-template-columns:repeat(2,minmax(0,1fr));} .section-top {display:block;margin-top:35px;} .controls {margin-top:17px;} .cards {grid-template-columns:1fr;} .chart-area {padding:22px 15px;} .chart-header {display:block;} .chart-caption {display:inline-block;margin-top:13px;} .chart-wrap {height:330px;} .safety {padding:15px;} }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="Primary navigation">
+      <div class="flex items-center gap-3">
+        <div class="logo-badge" aria-hidden="true">
+          <svg width="31" height="31" viewBox="0 0 32 32" fill="none"><path d="M2 24 11 8l5 9 5-7 9 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="m8 13 3 3 3-3M19 13l3 3 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="brand">ALPINE <span>CONDITIONS INTELLIGENCE</span></div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-status flex items-center gap-3">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span id="last-updated" class="text-xs muted">Awaiting first update</span>
+        </div>
+        <button id="refresh" class="refresh" type="button" aria-label="Refresh dashboard data">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></svg> Refresh
+        </button>
+      </div>
+    </nav>
+
+    <header class="intro">
+      <div>
+        <div class="eyebrow">Your mountains. One view.</div>
+        <h1>Chasing the <em>next storm.</em></h1>
+        <p>Daily snow intelligence from nine legendary touring zones across Canada and the U.S. Compare conditions, spot new snowfall, and check official avalanche resources before heading out.</p>
+      </div>
+      <div class="intro-side">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Daily model refresh · 06:00 EST
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div>
+          <div class="hero-label"><span aria-hidden="true">✳</span> <span id="hero-badge">DAILY POWDER WATCH</span></div>
+          <h2 class="hero-title" id="hero-title">Waiting for first report</h2>
+          <p class="hero-location" id="hero-location">Run the daily GitHub Actions workflow to load conditions.</p>
+        </div>
+        <p class="hero-foot" id="hero-foot">Highest modeled snowfall in the most recent 24 hours</p>
+      </div>
+      <div class="hero-score">
+        <div><span class="score-number" id="hero-snow">—</span><span class="score-unit" id="hero-unit">cm</span></div>
+        <p class="score-caption">NEW SNOW · 24 HOURS</p>
+        <p class="score-note" id="hero-status">No report yet</p>
+      </div>
+    </section>
+
+    <section class="metrics-strip" aria-label="Conditions at a glance">
+      <div class="metric">
+        <div class="metric-kicker"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 18 6-10 4 6 3-4 5 8"/></svg> Zones reporting</div>
+        <div class="metric-value" id="metric-reporting">— / 9</div><div class="metric-sub">From coast to coast</div>
+      </div>
+      <div class="metric">
+        <div class="metric-kicker"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2v20M4.9 6l14.2 12M4.9 18 19.1 6"/></svg> Total fresh snowfall</div>
+        <div class="metric-value" id="metric-total">—</div><div class="metric-sub">Sum across available zones · 24h</div>
+      </div>
+      <div class="metric">
+        <div class="metric-kicker"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 19h18M4 15l4-5 4 3 5-8 3 10"/></svg> Deepest model base</div>
+        <div class="metric-value" id="metric-depth">—</div><div class="metric-sub" id="metric-depth-zone">Across tracked areas</div>
+      </div>
+      <div class="metric">
+        <div class="metric-kicker"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 8h13a3 3 0 1 0-3-3M2 12h18a2 2 0 1 1-2 2M2 16h8a3 3 0 1 1-3 3"/></svg> Strongest current gust</div>
+        <div class="metric-value" id="metric-gust">—</div><div class="metric-sub" id="metric-gust-zone">At 10 m above terrain</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="zones-heading">
+      <div class="section-top">
+        <div>
+          <div class="eyebrow">The conditions board</div>
+          <h2 id="zones-heading">Explore the backcountry</h2>
+          <p id="filter-description">Nine zones · modeled conditions at each coordinate</p>
+        </div>
+        <div class="controls">
+          <div class="toggle-group" role="group" aria-label="Region filter">
+            <button type="button" class="toggle filter" data-filter="All" aria-pressed="true">All regions</button>
+            <button type="button" class="toggle filter" data-filter="East" aria-pressed="false">East</button>
+            <button type="button" class="toggle filter" data-filter="West" aria-pressed="false">West</button>
+          </div>
+          <div class="toggle-group" role="group" aria-label="Measurement units">
+            <button type="button" class="toggle units" data-unit="metric" aria-pressed="true">Metric</button>
+            <button type="button" class="toggle units" data-unit="imperial" aria-pressed="false">Imperial</button>
+          </div>
+        </div>
+      </div>
+      <div id="zone-cards" class="cards" aria-live="polite"></div>
+    </section>
+
+    <section class="chart-area" aria-labelledby="chart-title">
+      <div class="chart-header">
+        <div>
+          <div class="eyebrow" style="margin-bottom:7px">The past seven days</div>
+          <h2 id="chart-title">Snowfall comparison</h2>
+          <p>Seven consecutive 24-hour windows, ending at the same UTC hour each day. Select a line in the legend to hide it.</p>
+        </div>
+        <span class="chart-caption" id="chart-units">DAILY SNOWFALL · CM</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="snow-chart" aria-label="Line chart comparing seven days of modeled snowfall across regions" role="img"></canvas>
+        <div id="chart-empty" class="chart-empty"><strong>No snowfall history available yet</strong><span>Data appears automatically after the first successful fetch.</span></div>
+      </div>
+    </section>
+
+    <aside class="safety" aria-label="Important safety information">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5m0 3v1"/></svg>
+      <div>
+        <strong>Weather intelligence is not an avalanche forecast.</strong>
+        <p>Open-Meteo snow depth, snowfall, temperature and wind are modeled grid estimates, not mountain station measurements; their accuracy can vary sharply with elevation, terrain and wind transport. “Powder Alert” only means ≥15 cm of modeled new snow, not that skiing is safe. Consult the linked official forecast (where available), recent observations, access restrictions and field conditions. Some East Coast locations have no dedicated avalanche bulletin.</p>
+      </div>
+    </aside>
+    <footer>
+      <span>ALPINE DASHBOARD · Independent personal touring conditions tracker</span>
+      <span>Weather data: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> · Not affiliated with avalanche forecasting agencies</span>
+    </footer>
+  </main>
+
+  <script>
+    'use strict';
+    const FALLBACK = [
+      ['chic-chocs', 'Chic-Chocs', 'Gaspésie, Québec', 'East', 'Avalanche Québec', 'https://avalanchequebec.ca/bulletin-davalanche/', 'bulletin', 'Confirm your route is inside the bulletin coverage area.'],
+      ['laurentians', 'Laurentians', 'Montagne Noire · St-Donat, Québec', 'East', 'Avalanche Québec', 'https://avalanchequebec.ca/', 'resource', 'No location-specific St-Donat bulletin is published.'],
+      ['tuckerman', 'Tuckerman Ravine', 'Mount Washington, New Hampshire', 'East', 'Mount Washington Avalanche Center', 'https://www.mountwashingtonavalanchecenter.org/', 'bulletin', 'Seasonal forecasting operations vary.'],
+      ['adirondacks', 'Adirondacks', 'Mount Marcy, New York', 'East', 'New York DEC', 'https://dec.ny.gov/things-to-do/hiking/adirondack-backcountry/backcountry-information-for-adirondack-park', 'resource', 'Backcountry advisory, not a danger-rating bulletin.'],
+      ['rogers-pass', 'Rogers Pass', 'Glacier National Park, British Columbia', 'West', 'Parks Canada / Avalanche Canada', 'https://avalanche.ca/en/forecasts', 'bulletin', 'Select Glacier National Park and check winter permit/access restrictions.'],
+      ['loveland-pass', 'Loveland Pass', 'Front Range, Colorado', 'West', 'Colorado Avalanche Information Center', 'https://www.avalanche.state.co.us/forecasts', 'bulletin', 'Choose the Front Range forecast zone.'],
+      ['wasatch', 'Wasatch Backcountry', 'Alta · Brighton, Utah', 'West', 'Utah Avalanche Center', 'https://utahavalanchecenter.org/forecast/salt-lake', 'bulletin', 'Salt Lake Area Mountains bulletin.'],
+      ['tetons', 'Tetons', 'Teton Pass, Wyoming', 'West', 'Bridger-Teton Avalanche Center', 'https://bridgertetonavalanchecenter.org/', 'bulletin', 'Choose the Teton forecast area.'],
+      ['mount-baker', 'Mount Baker', 'North Cascades, Washington', 'West', 'Northwest Avalanche Center', 'https://nwac.us/', 'bulletin', 'Choose West Slopes North / Mt. Baker.']
+    ].map(([id, name, location, region, agency, forecast_url, forecast_kind, forecast_note]) =>
+      ({ id, name, location, region, agency, forecast_url, forecast_kind, forecast_note }));
+
+    const COLORS = ['#67dff3','#b69cf9','#d895ff','#eeb8a2','#59d6b4','#ffb965','#e87980','#89b4fa','#d9e879'];
+    const $ = id => document.getElementById(id);
+    const state = { region: 'All', unit: 'metric', zones: FALLBACK, generated: null, reference: null, chart: null, loading: false };
+    const isNumber = value => typeof value === 'number' && Number.isFinite(value);
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    const lengthUnit = () => state.unit === 'metric' ? 'cm' : 'in';
+    const windUnit = () => state.unit === 'metric' ? 'km/h' : 'mph';
+    const snow = cm => isNumber(cm) ? cm * (state.unit === 'metric' ? 1 : 1 / 2.54) : null;
+    const temp = c => isNumber(c) ? state.unit === 'metric' ? c : (c * 9 / 5 + 32) : null;
+    const wind = kmh => isNumber(kmh) ? kmh * (state.unit === 'metric' ? 1 : 0.621371) : null;
+    const fmt = (n, digits = 0) => isNumber(n) ? n.toLocaleString('en-CA', { maximumFractionDigits: digits, minimumFractionDigits: digits }) : '—';
+    const compass = deg => !isNumber(deg) ? '—' : ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(deg / 22.5) % 16];
+    const dateLabel = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-CA', { month:'short', day:'numeric', timeZone:'UTC' });
+    const isStale = () => !state.generated || (Date.now() - Date.parse(state.generated)) > 36 * 3600000;
+    const reportable = z => !isStale() && !z.error && isNumber(z.snow_24h_cm);
+    const filtered = () => state.zones.filter(z => state.region === 'All' || z.region === state.region);
+    const snowSvg = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M4 6l16 12M4 18 20 6M8 4l4 4 4-4M8 20l4-4 4 4M3 10l5 2-2 5m15-7-5 2 2 5"/></svg>';
+    const arrowSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>';
+
+    function renderHero() {
+      const available = state.zones.filter(reportable).sort((a,b) => b.snow_24h_cm - a.snow_24h_cm);
+      const best = available[0];
+      $('hero-badge').textContent = best ? (best.snow_24h_cm >= 15 ? 'TOP POWDER ALERT' : 'TOP SNOWFALL ZONE') : 'DAILY POWDER WATCH';
+      $('hero-title').textContent = best ? best.name : state.generated ? 'Conditions temporarily unavailable' : 'Waiting for first report';
+      $('hero-location').textContent = best ? best.location : state.generated ? 'Model report is unavailable or more than 36 hours old.' : 'Run the daily GitHub Actions workflow to load conditions.';
+      $('hero-snow').textContent = best ? fmt(snow(best.snow_24h_cm),1) : '—';
+      $('hero-unit').textContent = lengthUnit();
+      $('hero-status').textContent = best ? best.snow_24h_cm >= 15 ? 'Powder threshold reached' : 'Highest fresh snowfall' : 'No recent report';
+      $('hero-foot').textContent = best ? 'Highest modeled snowfall · last completed 24-hour period' : 'Modeled 24-hour totals, not on-snow observations';
+    }
+
+    function renderStats() {
+      const recent = state.zones.filter(z => !isStale() && !z.error);
+      const totals = recent.filter(z => isNumber(z.snow_24h_cm));
+      const depths = recent.filter(z => isNumber(z.snow_depth_cm)).sort((a,b) => b.snow_depth_cm - a.snow_depth_cm);
+      const gusts = recent.filter(z => isNumber(z.wind_gust_kmh)).sort((a,b) => b.wind_gust_kmh - a.wind_gust_kmh);
+      $('metric-reporting').textContent = `${recent.length} / ${state.zones.length}`;
+      $('metric-total').textContent = totals.length ? `${fmt(snow(totals.reduce((sum,z) => sum + z.snow_24h_cm, 0)),1)} ${lengthUnit()}` : '—';
+      $('metric-depth').textContent = depths.length ? `${fmt(snow(depths[0].snow_depth_cm),1)} ${lengthUnit()}` : '—';
+      $('metric-depth-zone').textContent = depths.length ? depths[0].name : 'Across tracked areas';
+      $('metric-gust').textContent = gusts.length ? `${fmt(wind(gusts[0].wind_gust_kmh))} ${windUnit()}` : '—';
+      $('metric-gust-zone').textContent = gusts.length ? gusts[0].name : 'At 10 m above terrain';
+      $('last-updated').textContent = state.generated ? `${isStale() ? 'Outdated · ' : 'Updated · '}${new Date(state.generated).toLocaleString('en-CA', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}` : 'Awaiting first update';
+    }
+
+    function sparkline(z) {
+      const days = z.snowfall_7d || [];
+      if (!days.length) return '<div class="spark" aria-label="No trend available"></div>';
+      const values = days.map(day => day.snowfall_cm);
+      const max = Math.max(1, ...values.filter(isNumber));
+      return `<div class="spark" aria-label="Seven-day snowfall sparkline">${values.map(value =>
+        `<i style="height:${isNumber(value) ? Math.max(8, Math.round(value / max * 100)) : 3}% ; opacity:${isNumber(value) ? '1' : '.2'}"></i>`).join('')}</div>`;
+    }
+
+    function card(z) {
+      const fresh = reportable(z);
+      const active = !isStale() && !z.error;
+      const badges = [];
+      if (!active) badges.push(`<span class="tag warning">${state.generated && isStale() ? 'Stale data' : z.error ? 'Data unavailable' : 'Awaiting data'}</span>`);
+      if (fresh && z.snow_24h_cm >= 15) badges.push('<span class="tag powder">✳ Powder Alert</span>');
+      if (active && isNumber(z.wind_gust_kmh) && z.wind_gust_kmh > 40) badges.push('<span class="tag wind">High Wind Warning</span>');
+      if (!badges.length) badges.push('<span class="tag normal">Modeled conditions</span>');
+      const base = active ? snow(z.snow_depth_cm) : null;
+      const temperature = active ? temp(z.temperature_c) : null;
+      const speed = active ? wind(z.wind_speed_kmh) : null;
+      const gust = active ? wind(z.wind_gust_kmh) : null;
+      const direction = active ? compass(z.wind_direction_deg) : '—';
+      const bearing = active && isNumber(z.wind_direction_deg) ? ` ${fmt(z.wind_direction_deg)}°` : '';
+      const note = z.forecast_kind === 'resource' ? 'Safety resource · no local danger forecast' : z.agency;
+      const title = z.forecast_kind === 'resource' ? 'Official safety information' : 'Official avalanche forecast';
+      const url = String(z.forecast_url || '');
+      const verifiedUrl = /^https:\/\/[a-z\d.-]+(?:\/|$)/i.test(url) ? escapeHtml(url) : '#';
+      return `<article class="zone-card">
+        <div class="zone-top"><div><div class="zone-region">${escapeHtml(z.region)} · ${escapeHtml(z.id.replaceAll('-', ' '))}</div>
+          <h3 class="zone-name">${escapeHtml(z.name)}</h3><p class="zone-location">${escapeHtml(z.location)}</p></div>
+          <div class="snow-icon">${snowSvg}</div></div>
+        <div class="snow-main"><strong>${fresh ? fmt(snow(z.snow_24h_cm),1) : '—'}</strong><span>${lengthUnit()} / 24h</span></div>
+        <div class="snow-micro"><span class="small-label">${active && isNumber(z.snow_7d_cm) ? `${fmt(snow(z.snow_7d_cm),1)} ${lengthUnit()} · 7 day total` : '7 day snow trend'}</span>${sparkline(active ? z : {})}</div>
+        <div class="tags">${badges.join('')}</div><div class="card-divider"></div>
+        <div class="details">
+          <div class="detail"><div class="small-label">Snow base</div><b>${fmt(base,1)}<small style="font-size:10px;color:#9daec0"> ${lengthUnit()}</small></b><span>Modeled depth</span></div>
+          <div class="detail"><div class="small-label">Temperature</div><b>${fmt(temperature)}<small style="font-size:10px;color:#9daec0"> °${state.unit==='metric'?'C':'F'}</small></b><span>2 m air temp</span></div>
+          <div class="detail"><div class="small-label">Wind</div><b>${fmt(speed)}<small style="font-size:10px;color:#9daec0"> ${state.unit==='metric'?'km/h':'mph'}</small></b><span>${direction}${bearing} · gust ${fmt(gust)} ${windUnit()}</span></div>
+        </div>
+        <a class="forecast-link" href="${verifiedUrl}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(z.forecast_note || '')}"><span>${title}</span>${arrowSvg}</a>
+        <p class="forecast-agency">${escapeHtml(note)} · ${escapeHtml(z.forecast_note || '')}</p>
+      </article>`;
+    }
+
+    function renderCards() {
+      const zones = filtered();
+      $('zone-cards').innerHTML = zones.map(card).join('');
+      $('filter-description').textContent = `${zones.length} ${zones.length === 1 ? 'zone' : 'zones'} · ${state.region === 'All' ? 'Canada + United States' : state.region + 'ern North America'} · modeled conditions`;
+    }
+
+    function renderChart() {
+      if (state.chart) { state.chart.destroy(); state.chart = null; }
+      $('chart-units').textContent = `24-HOUR SNOWFALL · ${lengthUnit().toUpperCase()}`;
+      const zones = filtered().filter(z => !isStale() && !z.error && z.snowfall_7d?.length === 7);
+      const canvas = $('snow-chart');
+      const ready = zones.length > 0 && typeof Chart !== 'undefined';
+      $('chart-empty').classList.toggle('visible', !ready);
+      canvas.style.visibility = ready ? 'visible' : 'hidden';
+      if (!ready) {
+        $('chart-empty').querySelector('strong').textContent = typeof Chart === 'undefined' && zones.length ? 'Chart library could not load' : 'No recent snowfall history available';
+        return;
+      }
+      const labels = zones[0].snowfall_7d.map(day => dateLabel(day.date));
+      const datasets = zones.map(z => ({
+        label: z.name,
+        data: z.snowfall_7d.map(day => snow(day.snowfall_cm)),
+        borderColor: COLORS[state.zones.findIndex(entry => entry.id === z.id) % COLORS.length],
+        backgroundColor: COLORS[state.zones.findIndex(entry => entry.id === z.id) % COLORS.length],
+        borderWidth: 2.5, pointRadius: 3, pointHoverRadius: 5,
+        tension: .3, spanGaps: false, fill: false,
+      }));
+      state.chart = new Chart(canvas, {
+        type: 'line', data: { labels, datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: matchMedia('(prefers-reduced-motion: reduce)').matches ? false : { duration: 350 },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#a6bbca', boxWidth: 11, boxHeight: 3, padding: 16, usePointStyle: true, pointStyle: 'line', font: { size: 11, weight: 600 } } },
+            tooltip: { backgroundColor: '#0a1927', borderColor: '#426475', borderWidth: 1, padding: 12,
+              callbacks: { label: context => ` ${context.dataset.label}: ${context.parsed.y === null ? 'unavailable' : fmt(context.parsed.y,1) + ' ' + lengthUnit()}` } },
+          },
+          scales: {
+            x: { grid: { display: false }, border: { display: false }, ticks: { color: '#8ba4b5', font: { size: 11 } } },
+            y: { beginAtZero: true, border: { display: false }, grid: { color: '#2a3b4b64' },
+              ticks: { color: '#8ba4b5', font: { size: 11 }, callback: value => value + ' ' + lengthUnit() } },
+          },
+        },
+      });
+    }
+
+    function render() {
+      document.querySelectorAll('.filter').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.filter === state.region)));
+      document.querySelectorAll('.units').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.unit === state.unit)));
+      renderHero(); renderStats(); renderCards(); renderChart();
+    }
+
+    async function load() {
+      if (state.loading) return;
+      state.loading = true;
+      $('refresh').disabled = true;
+      $('refresh').classList.add('spin');
+      try {
+        const response = await fetch(`./data.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload.zones) || payload.schema_version !== 1) throw new Error('Invalid data.json format');
+        state.zones = payload.zones.length ? payload.zones : FALLBACK;
+        state.generated = payload.generated_at || null;
+        state.reference = payload.reference_time_utc || null;
+        render();
+      } catch (error) {
+        console.error('Cannot load dashboard data:', error);
+        $('last-updated').textContent = 'Data fetch failed';
+        // Existing valid data stays visible; do not replace it with invented figures.
+      } finally {
+        state.loading = false;
+        $('refresh').disabled = false;
+        $('refresh').classList.remove('spin');
+      }
+    }
+
+    document.querySelectorAll('.filter').forEach(el => el.addEventListener('click', () => { state.region = el.dataset.filter; render(); }));
+    document.querySelectorAll('.units').forEach(el => el.addEventListener('click', () => { state.unit = el.dataset.unit; render(); }));
+    $('refresh').addEventListener('click', load);
+    // The Chart.js CDN script is deferred; draw again once it has loaded,
+    // even if data.json completed fetching before that script.
+    window.addEventListener('load', renderChart);
+    render();
+    load();
+  </script>
+</body>
+</html>

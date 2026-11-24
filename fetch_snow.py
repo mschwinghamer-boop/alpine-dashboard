@@ -13,8 +13,8 @@ import json
 import math
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
@@ -156,31 +156,67 @@ def rounded(value, digits=1):
     return round(value, digits) if value is not None else None
 
 
-def load_forecast(zone):
+BATCH_SIZE = 10
+BATCH_PAUSE_SECONDS = 5
+
+
+def retry_delay(exc, attempt):
+    """Respect Retry-After; do not hammer a rate-limited service."""
+    fallback = 60 * (2 ** attempt)
+    header = exc.headers.get("Retry-After") if exc.headers else None
+    if header:
+        try:
+            return max(fallback, int(header))
+        except ValueError:
+            try:
+                moment = parsedate_to_datetime(header)
+                return max(fallback, math.ceil((moment - datetime.now(timezone.utc)).total_seconds()))
+            except (ValueError, TypeError, OverflowError):
+                pass
+    return fallback
+
+
+def load_forecast_batch(zones):
+    """One HTTP request for up to ten locations; response order matches request."""
     params = {
-        "latitude": zone["lat"], "longitude": zone["lon"],
+        "latitude": ",".join(str(z["lat"]) for z in zones),
+        "longitude": ",".join(str(z["lon"]) for z in zones),
         "hourly": ",".join(HOURLY), "timezone": "UTC",
         "temperature_unit": "celsius", "wind_speed_unit": "kmh",
         "past_days": 8, "forecast_days": 16,
     }
     req = Request(
         API + "?" + urlencode(params),
-        headers={"User-Agent": "AlpineDashboard/1.0 (personal noncommercial snow tracker)", "Accept": "application/json"},
+        headers={"User-Agent": "AlpineDashboard/3.1 (personal noncommercial snow tracker)", "Accept": "application/json"},
     )
     for attempt in range(3):
         try:
-            with urlopen(req, timeout=25) as response:
+            with urlopen(req, timeout=45) as response:
                 payload = json.load(response)
-            if payload.get("error"):
+            if isinstance(payload, dict) and payload.get("error"):
                 raise ValueError(payload.get("reason", "Open-Meteo API error"))
+            if isinstance(payload, dict) and len(zones) == 1:
+                payload = [payload]
+            if not isinstance(payload, list) or len(payload) != len(zones):
+                raise ValueError("Unexpected multi-location API response length")
             return payload
         except (HTTPError, URLError, TimeoutError) as exc:
-            # Fail fast on non-retryable 4xx errors. Retry 429 and transient errors.
-            if isinstance(exc, HTTPError) and 400 <= exc.code < 500 and exc.code != 429:
-                raise
+            if isinstance(exc, HTTPError):
+                if 400 <= exc.code < 500 and exc.code != 429:
+                    raise
+                if exc.code == 429:
+                    if attempt == 2:
+                        raise
+                    delay = retry_delay(exc, attempt)
+                    if delay > 180:
+                        print(f"API requests a {delay}s cooldown; stopping this run.", file=sys.stderr, flush=True)
+                        raise
+                    print(f"API rate limit (429); cooling down {delay}s before retry.", file=sys.stderr, flush=True)
+                    time.sleep(delay)
+                    continue
             if attempt == 2:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(5 * (2 ** attempt))
     raise RuntimeError("Unreachable retry state")
 
 
@@ -302,16 +338,28 @@ def main():
     end_hour = now.replace(minute=0, second=0, microsecond=0) - timedelta(hours=1)
     by_id = {}
 
-    with ThreadPoolExecutor(max_workers=5) as pool:
-        futures = {pool.submit(load_forecast, zone): zone for zone in ZONES}
-        for future in as_completed(futures):
-            zone = futures[future]
-            try:
-                by_id[zone["id"]] = extract_zone(zone, future.result(), end_hour)
-                print(f"OK   {zone['name']}")
-            except (ValueError, KeyError, IndexError, TypeError, HTTPError, URLError, TimeoutError) as exc:
-                print(f"FAIL {zone['name']}: {exc}", file=sys.stderr)
+    for offset in range(0, len(ZONES), BATCH_SIZE):
+        batch = ZONES[offset:offset + BATCH_SIZE]
+        print(f"Fetching locations {offset + 1}-{offset + len(batch)} of {len(ZONES)}", flush=True)
+        try:
+            payloads = load_forecast_batch(batch)
+        except (ValueError, KeyError, IndexError, TypeError, HTTPError, URLError, TimeoutError) as exc:
+            if isinstance(exc, HTTPError) and exc.code == 429:
+                print("Open-Meteo is still rate limiting requests. Stopping to preserve the last good dataset. Retry later, not repeatedly.", file=sys.stderr, flush=True)
+                return 1
+            print(f"Batch failed: {exc}", file=sys.stderr, flush=True)
+            for zone in batch:
                 by_id[zone["id"]] = fallback_zone(zone, str(exc))
+        else:
+            for zone, payload in zip(batch, payloads):
+                try:
+                    by_id[zone["id"]] = extract_zone(zone, payload, end_hour)
+                    print(f"OK   {zone['name']}", flush=True)
+                except (ValueError, KeyError, IndexError, TypeError) as exc:
+                    print(f"FAIL {zone['name']}: {exc}", file=sys.stderr, flush=True)
+                    by_id[zone["id"]] = fallback_zone(zone, str(exc))
+        if offset + len(batch) < len(ZONES):
+            time.sleep(BATCH_PAUSE_SECONDS)
 
     result = [by_id[zone["id"]] for zone in ZONES]
     successful = sum(zone["error"] is None for zone in result)

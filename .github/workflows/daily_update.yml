@@ -3,7 +3,7 @@ name: Refresh and publish Alpine Dashboard
 
 on:
   schedule:
-    - cron: '0 11 * * *'
+       - cron: '0 5,11,17,23 * * *'
   workflow_dispatch:
     inputs:
       publish_only:

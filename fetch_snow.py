@@ -1332,12 +1332,33 @@ def save_history(zones, fetched_at):
 
 REGIONAL_POINTS = "Canada|Pacific|BC|British Columbia|Victoria|48.4284|-123.3656\nCanada|Prairies|AB|Alberta|Edmonton|53.5461|-113.4938\nCanada|Prairies|SK|Saskatchewan|Regina|50.4452|-104.6189\nCanada|Prairies|MB|Manitoba|Winnipeg|49.8951|-97.1384\nCanada|Central|ON|Ontario|Toronto|43.6532|-79.3832\nCanada|Central|QC|Quebec|Québec City|46.8139|-71.2080\nCanada|Atlantic|NB|New Brunswick|Fredericton|45.9636|-66.6431\nCanada|Atlantic|NS|Nova Scotia|Halifax|44.6488|-63.5752\nCanada|Atlantic|PE|Prince Edward Island|Charlottetown|46.2382|-63.1311\nCanada|Atlantic|NL|Newfoundland and Labrador|St. John's|47.5615|-52.7126\nCanada|North|YT|Yukon|Whitehorse|60.7212|-135.0568\nCanada|North|NT|Northwest Territories|Yellowknife|62.4540|-114.3718\nCanada|North|NU|Nunavut|Iqaluit|63.7467|-68.5170\nUSA|Southeast|AL|Alabama|Montgomery|32.3792|-86.3077\nUSA|Alaska & Hawaii|AK|Alaska|Juneau|58.3019|-134.4197\nUSA|Southwest|AZ|Arizona|Phoenix|33.4484|-112.0740\nUSA|South Central|AR|Arkansas|Little Rock|34.7465|-92.2896\nUSA|Pacific|CA|California|Sacramento|38.5816|-121.4944\nUSA|Mountain West|CO|Colorado|Denver|39.7392|-104.9903\nUSA|Northeast|CT|Connecticut|Hartford|41.7658|-72.6734\nUSA|Mid-Atlantic|DE|Delaware|Dover|39.1582|-75.5244\nUSA|Mid-Atlantic|DC|District of Columbia|Washington, D.C.|38.9072|-77.0369\nUSA|Southeast|FL|Florida|Tallahassee|30.4383|-84.2807\nUSA|Southeast|GA|Georgia|Atlanta|33.7490|-84.3880\nUSA|Alaska & Hawaii|HI|Hawaii|Honolulu|21.3069|-157.8583\nUSA|Mountain West|ID|Idaho|Boise|43.6150|-116.2023\nUSA|Midwest|IL|Illinois|Springfield|39.7817|-89.6501\nUSA|Midwest|IN|Indiana|Indianapolis|39.7684|-86.1581\nUSA|Midwest|IA|Iowa|Des Moines|41.5868|-93.6250\nUSA|Great Plains|KS|Kansas|Topeka|39.0473|-95.6752\nUSA|Southeast|KY|Kentucky|Frankfort|38.2009|-84.8733\nUSA|South Central|LA|Louisiana|Baton Rouge|30.4515|-91.1871\nUSA|Northeast|ME|Maine|Augusta|44.3106|-69.7795\nUSA|Mid-Atlantic|MD|Maryland|Annapolis|38.9784|-76.4922\nUSA|Northeast|MA|Massachusetts|Boston|42.3601|-71.0589\nUSA|Midwest|MI|Michigan|Lansing|42.7325|-84.5555\nUSA|Midwest|MN|Minnesota|Saint Paul|44.9537|-93.0900\nUSA|Southeast|MS|Mississippi|Jackson|32.2988|-90.1848\nUSA|Midwest|MO|Missouri|Jefferson City|38.5767|-92.1735\nUSA|Mountain West|MT|Montana|Helena|46.5891|-112.0391\nUSA|Great Plains|NE|Nebraska|Lincoln|40.8136|-96.7026\nUSA|Mountain West|NV|Nevada|Carson City|39.1638|-119.7674\nUSA|Northeast|NH|New Hampshire|Concord|43.2081|-71.5376\nUSA|Mid-Atlantic|NJ|New Jersey|Trenton|40.2171|-74.7429\nUSA|Southwest|NM|New Mexico|Santa Fe|35.6870|-105.9378\nUSA|Northeast|NY|New York|Albany|42.6526|-73.7562\nUSA|Southeast|NC|North Carolina|Raleigh|35.7796|-78.6382\nUSA|Great Plains|ND|North Dakota|Bismarck|46.8083|-100.7837\nUSA|Midwest|OH|Ohio|Columbus|39.9612|-82.9988\nUSA|South Central|OK|Oklahoma|Oklahoma City|35.4676|-97.5164\nUSA|Pacific|OR|Oregon|Salem|44.9429|-123.0351\nUSA|Mid-Atlantic|PA|Pennsylvania|Harrisburg|40.2732|-76.8867\nUSA|Northeast|RI|Rhode Island|Providence|41.8240|-71.4128\nUSA|Southeast|SC|South Carolina|Columbia|34.0007|-81.0348\nUSA|Great Plains|SD|South Dakota|Pierre|44.3683|-100.3510\nUSA|Southeast|TN|Tennessee|Nashville|36.1627|-86.7816\nUSA|South Central|TX|Texas|Austin|30.2672|-97.7431\nUSA|Mountain West|UT|Utah|Salt Lake City|40.7608|-111.8910\nUSA|Northeast|VT|Vermont|Montpelier|44.2601|-72.5754\nUSA|Mid-Atlantic|VA|Virginia|Richmond|37.5407|-77.4360\nUSA|Pacific|WA|Washington|Olympia|47.0379|-122.9007\nUSA|Mid-Atlantic|WV|West Virginia|Charleston|38.3498|-81.6326\nUSA|Midwest|WI|Wisconsin|Madison|43.0731|-89.4012\nUSA|Mountain West|WY|Wyoming|Cheyenne|41.1400|-104.8202\nCanada|Central|QC|Quebec|Montréal|45.5019|-73.5674\nCanada|Pacific|BC|British Columbia|Vancouver|49.2827|-123.1207\nCanada|Prairies|AB|Alberta|Calgary|51.0447|-114.0719\nUSA|Northeast|NY|New York|New York City|40.7128|-74.0060\nUSA|Pacific|CA|California|Los Angeles|34.0522|-118.2437\nUSA|Midwest|IL|Illinois|Chicago|41.8781|-87.6298\nUSA|Southeast|FL|Florida|Miami|25.7617|-80.1918\nUSA|Pacific|WA|Washington|Seattle|47.6062|-122.3321\n"
 
+MAJOR_CITY_POINTS = 'ON|Ottawa|45.42|-75.70\nQC|Gatineau|45.48|-75.70\nON|Hamilton|43.25|-79.87\nON|Kitchener|43.45|-80.49\nON|London|42.98|-81.25\nON|St. Catharines|43.16|-79.25\nON|Windsor|42.31|-83.04\nON|Oshawa|43.90|-78.86\nSK|Saskatoon|52.13|-106.67\nQC|Sherbrooke|45.40|-71.89\nBC|Kelowna|49.89|-119.50\nON|Barrie|44.39|-79.69\nBC|Abbotsford|49.05|-122.33\nON|Kingston|44.23|-76.49\nON|Sudbury|46.49|-81.00\nON|Guelph|43.54|-80.25\nQC|Saguenay|48.43|-71.07\nQC|Trois-Rivières|46.34|-72.54\nNB|Moncton|46.09|-64.78\nON|Brantford|43.14|-80.26\nNB|Saint John|45.27|-66.06\nON|Peterborough|44.31|-78.32\nAB|Lethbridge|49.69|-112.83\nON|Thunder Bay|48.38|-89.25\nBC|Nanaimo|49.17|-123.94\nBC|Kamloops|50.67|-120.34\nBC|Chilliwack|49.16|-121.95\nON|Belleville|44.16|-77.38\nQC|Drummondville|45.88|-72.48\nAB|Red Deer|52.27|-113.81\nTX|Houston|29.76|-95.37\nPA|Philadelphia|39.95|-75.17\nTX|San Antonio|29.42|-98.49\nCA|San Diego|32.72|-117.16\nTX|Dallas|32.78|-96.80\nTX|Fort Worth|32.75|-97.33\nFL|Jacksonville|30.33|-81.66\nCA|San Jose|37.34|-121.89\nNC|Charlotte|35.23|-80.84\nCA|San Francisco|37.77|-122.42\nTX|El Paso|31.76|-106.49\nNV|Las Vegas|36.17|-115.14\nMI|Detroit|42.33|-83.05\nKY|Louisville|38.25|-85.76\nOR|Portland|45.52|-122.68\nTN|Memphis|35.15|-90.05\nMD|Baltimore|39.29|-76.61\nWI|Milwaukee|43.04|-87.91\nNM|Albuquerque|35.08|-106.65\nCA|Fresno|36.74|-119.79\nAZ|Tucson|32.22|-110.97\nMO|Kansas City|39.10|-94.58\nAZ|Mesa|33.42|-111.83\nCO|Colorado Springs|38.83|-104.82\nNE|Omaha|41.26|-95.94\nVA|Virginia Beach|36.85|-75.98\nCA|Long Beach|33.77|-118.19\nCA|Oakland|37.80|-122.27\nMN|Minneapolis|44.98|-93.27\nCA|Bakersfield|35.37|-119.02\nOK|Tulsa|36.15|-95.99\nFL|Tampa|27.95|-82.46\nCO|Aurora|39.73|-104.83\nTX|Arlington|32.74|-97.11\nKS|Wichita|37.69|-97.34\nOH|Cleveland|41.50|-81.69\nLA|New Orleans|29.95|-90.07\nNV|Henderson|36.04|-114.98\nCA|Anaheim|33.84|-117.91\nFL|Orlando|28.54|-81.38\nKY|Lexington|38.05|-84.50\nCA|Stockton|37.96|-121.29\nNJ|Newark|40.74|-74.17\nCA|Riverside|33.98|-117.37\nCA|Irvine|33.68|-117.83\nTX|Corpus Christi|27.80|-97.40\nCA|Santa Ana|33.75|-117.87\nOH|Cincinnati|39.10|-84.51\nNC|Greensboro|36.07|-79.79\nPA|Pittsburgh|40.44|-80.00\nNC|Durham|35.99|-78.90\nNJ|Jersey City|40.72|-74.04\nNV|North Las Vegas|36.20|-115.12\nTX|Plano|33.02|-96.70\nAZ|Gilbert|33.35|-111.79\nAK|Anchorage|61.22|-149.90\nNV|Reno|39.53|-119.81\nAZ|Chandler|33.31|-111.84\nMO|St. Louis|38.63|-90.20\nCA|Chula Vista|32.64|-117.08\nIN|Fort Wayne|41.08|-85.14\nNY|Buffalo|42.89|-78.87\nTX|Lubbock|33.58|-101.86\nTX|Laredo|27.50|-99.51\nFL|Port St. Lucie|27.27|-80.35\nFL|St. Petersburg|27.77|-82.64\nOH|Toledo|41.65|-83.54\nAZ|Glendale|33.54|-112.19\nNC|Winston-Salem|36.10|-80.24\nTX|Irving|32.81|-96.95\nVA|Chesapeake|36.82|-76.27\nTX|Garland|32.91|-96.64\nAZ|Scottsdale|33.49|-111.93\nTX|Frisco|33.15|-96.82\nFL|Cape Coral|26.56|-81.95\nTX|McKinney|33.20|-96.64\nAL|Huntsville|34.73|-86.59\nBC|Surrey|49.19|-122.85\nON|Mississauga|43.59|-79.64\nON|Brampton|43.73|-79.76\nQC|Laval|45.61|-73.71\nON|Markham|43.86|-79.34\nQC|Longueuil|45.53|-73.52\nBC|Prince George|53.92|-122.75\nAB|Grande Prairie|55.17|-118.79\nMT|Billings|45.78|-108.50\nWA|Spokane|47.66|-117.43\nWA|Tacoma|47.25|-122.44\nOR|Eugene|44.05|-123.09\nCA|Santa Barbara|34.42|-119.70\nCA|Santa Cruz|36.97|-122.03\nNM|Las Cruces|32.31|-106.78\nSD|Sioux Falls|43.55|-96.73\nND|Fargo|46.88|-96.79\nME|Portland|43.66|-70.26\nVT|Burlington|44.48|-73.21\nNH|Manchester|43.00|-71.45\nNY|Rochester|43.16|-77.61\nSC|Charleston|32.78|-79.93\nFL|Fort Lauderdale|26.12|-80.14\nFL|Fort Myers|26.64|-81.87\nGA|Savannah|32.08|-81.10\nTX|Brownsville|25.90|-97.50\nAK|Fairbanks|64.84|-147.72'
+VAN_DESTINATIONS = 'BC|Tofino|49.15|-125.91|Coastal surf & rainforest\nBC|Ucluelet|48.94|-125.55|Coastal hikes & surf\nBC|Squamish|49.70|-123.15|Climbing & mountain biking\nBC|Whistler|50.12|-122.95|Skiing & mountain biking\nBC|Pemberton|50.32|-122.81|Mountain access\nBC|Revelstoke|51.00|-118.20|Ski touring & biking\nBC|Golden|51.30|-116.97|Rockies & ski touring\nBC|Nelson|49.49|-117.29|Kootenay Lake & ski touring\nBC|Rossland|49.08|-117.80|Skiing & biking\nBC|Fernie|49.50|-115.06|Mountain access\nBC|Kelowna|49.89|-119.50|Okanagan lake & biking\nBC|Penticton|49.50|-119.59|Okanagan climbing & lakes\nBC|Osoyoos|49.03|-119.47|Dry southern Okanagan\nBC|Radium Hot Springs|50.62|-116.07|Columbia Valley\nBC|Harrison Hot Springs|49.30|-121.79|Lake & mountain access\nBC|Port Renfrew|48.55|-124.42|Pacific coast\nBC|Campbell River|50.02|-125.25|Island coast & forest\nBC|Smithers|54.78|-127.17|Northern mountain access\nAB|Banff|51.18|-115.57|Canadian Rockies\nAB|Canmore|51.09|-115.36|Climbing & ski touring\nAB|Jasper|52.87|-118.08|Canadian Rockies\nAB|Waterton Park|49.05|-113.91|Mountain lakes\nYT|Haines Junction|60.75|-137.51|Kluane region\nON|Tobermory|45.25|-81.66|Bruce Peninsula\nQC|Gaspé|48.83|-64.48|Gaspésie coast\nQC|Sainte-Anne-des-Monts|49.13|-66.49|Chic-Chocs access\nQC|Tadoussac|48.15|-69.72|St. Lawrence coast\nNS|Ingonish|46.66|-60.40|Cabot Trail\nNB|Alma|45.60|-64.95|Fundy coast\nNL|Rocky Harbour|49.59|-57.92|Gros Morne access\nWA|Port Angeles|48.12|-123.43|Olympic Peninsula\nWA|Forks|47.95|-124.39|Olympic coast\nWA|Leavenworth|47.60|-120.66|Cascades access\nWA|Bellingham|48.75|-122.48|Mountain biking & coast\nOR|Bend|44.06|-121.31|Mountain biking & skiing\nOR|Hood River|45.71|-121.52|Columbia Gorge\nOR|Cannon Beach|45.89|-123.96|Pacific coast\nOR|Brookings|42.05|-124.28|Southern Oregon coast\nCA|Crescent City|41.76|-124.20|Redwoods coast\nCA|Fort Bragg|39.45|-123.81|Mendocino coast\nCA|Big Sur|36.27|-121.81|Pacific coast\nCA|Morro Bay|35.37|-120.85|Coastal access\nCA|San Diego|32.72|-117.16|Beach & surf region\nCA|Joshua Tree|34.13|-116.31|Desert & climbing\nCA|Borrego Springs|33.26|-116.38|Anza-Borrego desert\nCA|Palm Springs|33.83|-116.55|Coachella Valley\nCA|Furnace Creek|36.46|-116.87|Death Valley lowlands\nCA|Bishop|37.36|-118.40|Eastern Sierra climbing\nCA|Lone Pine|36.61|-118.06|Sierra foothills\nCA|Mammoth Lakes|37.65|-118.97|Ski & mountain access\nCA|South Lake Tahoe|38.94|-119.98|Sierra mountain access\nNV|Overton|36.54|-114.44|Lake Mead & desert\nNV|Pahrump|36.21|-115.98|Desert valleys\nNV|Boulder City|35.98|-114.83|Lake Mead access\nAZ|Sedona|34.87|-111.76|Red rock biking & hiking\nAZ|Quartzsite|33.66|-114.23|Desert camping region\nAZ|Yuma|32.69|-114.63|Lower Colorado desert\nAZ|Ajo|32.37|-112.86|Sonoran desert\nAZ|Lake Havasu City|34.48|-114.32|Colorado River\nAZ|Tucson|32.22|-110.97|Sonoran desert trails\nAZ|Flagstaff|35.20|-111.65|High plateau & skiing\nUT|Moab|38.57|-109.55|Mountain biking & red rocks\nUT|St. George|37.10|-113.58|Low desert & mountain biking\nUT|Springdale|37.19|-113.00|Zion gateway\nUT|Kanab|37.05|-112.53|Red rock country\nUT|Escalante|37.77|-111.60|Grand Staircase region\nNM|Las Cruces|32.31|-106.78|Southern desert\nNM|Truth or Consequences|33.13|-107.25|Hot springs & desert\nNM|Silver City|32.77|-108.28|Gila region\nCO|Durango|37.28|-107.88|San Juan access\nCO|Fruita|39.16|-108.73|Desert mountain biking\nCO|Salida|38.53|-106.00|Arkansas River valley\nCO|Ouray|38.02|-107.67|San Juan mountains\nID|Sandpoint|48.28|-116.55|Lake & mountain access\nID|McCall|44.91|-116.10|Mountain lakes\nMT|Whitefish|48.41|-114.34|Glacier region\nMT|Bozeman|45.68|-111.04|Mountain access\nWY|Jackson|43.48|-110.76|Tetons access\nAK|Seward|60.10|-149.44|Kenai coast\nTX|Terlingua|29.32|-103.62|Big Bend desert\nTX|Marfa|30.31|-104.02|High desert\nTX|Port Aransas|27.83|-97.06|Gulf coast\nTX|South Padre Island|26.11|-97.17|Gulf beaches\nFL|Key West|24.56|-81.78|Florida Keys\nFL|Homestead|25.47|-80.48|Everglades gateway\nFL|Cedar Key|29.14|-83.04|Gulf coast\nFL|Apalachicola|29.73|-84.98|Panhandle coast\nAL|Gulf Shores|30.25|-87.70|Gulf beaches\nMS|Ocean Springs|30.41|-88.83|Gulf coast\nLA|Grand Isle|29.24|-89.99|Gulf coast\nGA|Tybee Island|32.00|-80.85|Atlantic coast\nSC|Folly Beach|32.66|-79.94|Atlantic beaches\nNC|Asheville|35.60|-82.55|Blue Ridge access\nNC|Nags Head|35.96|-75.62|Outer Banks\nTN|Townsend|35.68|-83.75|Smokies access\nVA|Chincoteague|37.93|-75.38|Atlantic coast\nME|Bar Harbor|44.39|-68.20|Acadia gateway\nNH|North Conway|44.05|-71.13|White Mountains\nVT|Stowe|44.47|-72.69|Green Mountains\nNY|Lake Placid|44.28|-73.98|Adirondacks\nWV|Fayetteville|38.05|-81.10|New River Gorge\nSD|Custer|43.77|-103.60|Black Hills\nMN|Grand Marais|47.75|-90.33|Lake Superior shore\nMI|Munising|46.41|-86.65|Pictured Rocks\nWI|Bayfield|46.81|-90.82|Lake Superior shore\nAR|Hot Springs|34.50|-93.05|Ouachita region\nOK|Medicine Park|34.73|-98.50|Wichita Mountains'
+
 def regional_catalog():
     result = []
     for i, line in enumerate(REGIONAL_POINTS.strip().splitlines()):
         country, region, code, division, city, lat, lon = line.split('|')
         result.append(dict(id=f'temp-{i+1:02}', country=country, region=region,
                            code=code, division=division, city=city, lat=float(lat), lon=float(lon)))
+    meta = {p['code']: (p['country'], p['region'], p['division']) for p in result}
+    by_key = {(p['code'], p['city']): p for p in result}
+    def add(code, city, lat, lon):
+        key = (code, city)
+        if key not in by_key:
+            country, region, division = meta[code]
+            p = dict(id=f'temp-{len(result)+1:02}', country=country, region=region,
+                     code=code, division=division, city=city, lat=float(lat), lon=float(lon))
+            result.append(p)
+            by_key[key] = p
+        return by_key[key]
+    for line in MAJOR_CITY_POINTS.strip().splitlines():
+        add(*line.split('|'))
+    for line in VAN_DESTINATIONS.strip().splitlines():
+        code, city, lat, lon, feature = line.split('|')
+        p = add(code, city, lat, lon)
+        p['van_spot'] = True
+        p['van_feature'] = feature
     return result
 
 
@@ -1411,6 +1432,70 @@ def collect_regional(now, previous):
     return records
 
 
+
+# Open resort directory: separate from weather snapshots; ODbL 1.0.
+RESORT_CSV = "https://snowguide.com/data/resorts.csv"
+RESORT_ATTRIBUTION = "SnowGuide / OpenSkiData / OpenSkiMap.org, © OpenStreetMap contributors (ODbL), Skimap.org, Who's On First, © Mapterhorn"
+
+
+def parse_resort_catalog(raw):
+    import re
+    rows = csv.DictReader(raw.splitlines())
+    required = {"slug", "name", "country", "region", "lat", "lon", "lifts_total"}
+    if not required.issubset(rows.fieldnames or []):
+        raise ValueError("Resort CSV schema changed")
+    result = {}
+    for row in rows:
+        key = row['country'].strip().lower()
+        country = ('Canada' if key in ('ca','can','canada') else 'USA' if key in ('us','usa','united states','united states of america','us of a') else None)
+        if not country:
+            continue
+        try:
+            lat, lon = float(row['lat']), float(row['lon'])
+            lifts = int(float(row['lifts_total']))
+        except (ValueError, TypeError):
+            continue
+        if not (-90 <= lat <= 90 and -180 <= lon <= 180 and lifts >= 1):
+            continue
+        name = (row.get('display_name') or row['name']).strip()
+        slug = row['slug'].strip()
+        if not name or not slug:
+            continue
+        code = (row.get('region_code') or '').strip().split('-')[-1]
+        division = (row.get('region') or code or 'Unknown subdivision').strip()
+        website = (row.get('website') or '').strip()
+        result[slug] = dict(id='directory-'+slug, name=name, country=country, region=division,
+                            province_state=division, location=division+' · '+country, lat=lat, lon=lon,
+                            destination_type='resort', directory_only=True, lifts=lifts,
+                            forecast_url=website if website.startswith('https://') else '',
+                            coordinate_status='Catalog reference point; not necessarily summit',
+                            upper_reference='Catalog location', error='Weather on demand')
+    counts = {c: sum(r['country']==c for r in result.values()) for c in ('Canada','USA')}
+    if counts['Canada'] < 100 or counts['USA'] < 300:
+        raise ValueError(f'Unexpectedly incomplete resort directory: {counts}')
+    return sorted(result.values(), key=lambda r:(r['country'],r['name'].lower()))
+
+
+def get_resort_directory(now, previous):
+    old = previous.get('resort_directory', {})
+    if not isinstance(old, dict):
+        old = {}
+    if str(old.get('last_attempt',''))[:10] == now.date().isoformat():
+        return old
+    try:
+        req = Request(RESORT_CSV, headers={'User-Agent':'AlpineTelemetry/6 (personal weather dashboard)','Accept':'text/csv'})
+        with urlopen(req, timeout=40) as response:
+            raw = response.read(12_000_001)
+        if len(raw)>12_000_000:
+            raise ValueError('Resort catalog exceeds size limit')
+        entries = parse_resort_catalog(raw.decode('utf-8-sig'))
+        print(f'Resort directory: {len(entries)} catalog entries', flush=True)
+        return {'entries':entries,'last_attempt':iso_utc(now),'updated_at':iso_utc(now),'source':RESORT_CSV,'attribution':RESORT_ATTRIBUTION,'license':'https://opendatacommons.org/licenses/odbl/1-0/','error':None}
+    except (OSError, ValueError, UnicodeError, TypeError, KeyError) as exc:
+        print(f'Resort directory unavailable; retaining previous catalog: {exc}', file=sys.stderr, flush=True)
+        return {**old,'last_attempt':iso_utc(now),'source':RESORT_CSV,'attribution':RESORT_ATTRIBUTION,'license':'https://opendatacommons.org/licenses/odbl/1-0/','error':str(exc),'entries':old.get('entries',[])}
+
+
 def main():
     now = datetime.now(timezone.utc)
     end_hour = now.replace(minute=0, second=0, microsecond=0) - timedelta(hours=1)
@@ -1446,13 +1531,17 @@ def main():
         return 1
 
     try:
-        previous = json.loads(DATA_FILE.read_text(encoding="utf-8")).get("temperature_regions", [])
+        previous_doc = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+        previous = previous_doc.get("temperature_regions", [])
     except (OSError, ValueError, AttributeError):
         previous = []
+        previous_doc = {}
+    directory = get_resort_directory(now, previous_doc)
     time.sleep(BATCH_PAUSE_SECONDS)
     temperatures = collect_regional(datetime.now(timezone.utc), previous)
     document = {
-        "schema_version": 5,
+        "schema_version": 6,
+        "resort_directory": directory,
         "temperature_regions": temperatures,
         "temperature_source": "Open-Meteo city-point model estimates; local calendar days; not regional averages.",
         "generated_at": iso_utc(now),

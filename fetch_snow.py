@@ -1330,6 +1330,87 @@ def save_history(zones, fetched_at):
     temporary.replace(HISTORY_FILE)
 
 
+REGIONAL_POINTS = "Canada|Pacific|BC|British Columbia|Victoria|48.4284|-123.3656\nCanada|Prairies|AB|Alberta|Edmonton|53.5461|-113.4938\nCanada|Prairies|SK|Saskatchewan|Regina|50.4452|-104.6189\nCanada|Prairies|MB|Manitoba|Winnipeg|49.8951|-97.1384\nCanada|Central|ON|Ontario|Toronto|43.6532|-79.3832\nCanada|Central|QC|Quebec|Québec City|46.8139|-71.2080\nCanada|Atlantic|NB|New Brunswick|Fredericton|45.9636|-66.6431\nCanada|Atlantic|NS|Nova Scotia|Halifax|44.6488|-63.5752\nCanada|Atlantic|PE|Prince Edward Island|Charlottetown|46.2382|-63.1311\nCanada|Atlantic|NL|Newfoundland and Labrador|St. John's|47.5615|-52.7126\nCanada|North|YT|Yukon|Whitehorse|60.7212|-135.0568\nCanada|North|NT|Northwest Territories|Yellowknife|62.4540|-114.3718\nCanada|North|NU|Nunavut|Iqaluit|63.7467|-68.5170\nUSA|Southeast|AL|Alabama|Montgomery|32.3792|-86.3077\nUSA|Alaska & Hawaii|AK|Alaska|Juneau|58.3019|-134.4197\nUSA|Southwest|AZ|Arizona|Phoenix|33.4484|-112.0740\nUSA|South Central|AR|Arkansas|Little Rock|34.7465|-92.2896\nUSA|Pacific|CA|California|Sacramento|38.5816|-121.4944\nUSA|Mountain West|CO|Colorado|Denver|39.7392|-104.9903\nUSA|Northeast|CT|Connecticut|Hartford|41.7658|-72.6734\nUSA|Mid-Atlantic|DE|Delaware|Dover|39.1582|-75.5244\nUSA|Mid-Atlantic|DC|District of Columbia|Washington, D.C.|38.9072|-77.0369\nUSA|Southeast|FL|Florida|Tallahassee|30.4383|-84.2807\nUSA|Southeast|GA|Georgia|Atlanta|33.7490|-84.3880\nUSA|Alaska & Hawaii|HI|Hawaii|Honolulu|21.3069|-157.8583\nUSA|Mountain West|ID|Idaho|Boise|43.6150|-116.2023\nUSA|Midwest|IL|Illinois|Springfield|39.7817|-89.6501\nUSA|Midwest|IN|Indiana|Indianapolis|39.7684|-86.1581\nUSA|Midwest|IA|Iowa|Des Moines|41.5868|-93.6250\nUSA|Great Plains|KS|Kansas|Topeka|39.0473|-95.6752\nUSA|Southeast|KY|Kentucky|Frankfort|38.2009|-84.8733\nUSA|South Central|LA|Louisiana|Baton Rouge|30.4515|-91.1871\nUSA|Northeast|ME|Maine|Augusta|44.3106|-69.7795\nUSA|Mid-Atlantic|MD|Maryland|Annapolis|38.9784|-76.4922\nUSA|Northeast|MA|Massachusetts|Boston|42.3601|-71.0589\nUSA|Midwest|MI|Michigan|Lansing|42.7325|-84.5555\nUSA|Midwest|MN|Minnesota|Saint Paul|44.9537|-93.0900\nUSA|Southeast|MS|Mississippi|Jackson|32.2988|-90.1848\nUSA|Midwest|MO|Missouri|Jefferson City|38.5767|-92.1735\nUSA|Mountain West|MT|Montana|Helena|46.5891|-112.0391\nUSA|Great Plains|NE|Nebraska|Lincoln|40.8136|-96.7026\nUSA|Mountain West|NV|Nevada|Carson City|39.1638|-119.7674\nUSA|Northeast|NH|New Hampshire|Concord|43.2081|-71.5376\nUSA|Mid-Atlantic|NJ|New Jersey|Trenton|40.2171|-74.7429\nUSA|Southwest|NM|New Mexico|Santa Fe|35.6870|-105.9378\nUSA|Northeast|NY|New York|Albany|42.6526|-73.7562\nUSA|Southeast|NC|North Carolina|Raleigh|35.7796|-78.6382\nUSA|Great Plains|ND|North Dakota|Bismarck|46.8083|-100.7837\nUSA|Midwest|OH|Ohio|Columbus|39.9612|-82.9988\nUSA|South Central|OK|Oklahoma|Oklahoma City|35.4676|-97.5164\nUSA|Pacific|OR|Oregon|Salem|44.9429|-123.0351\nUSA|Mid-Atlantic|PA|Pennsylvania|Harrisburg|40.2732|-76.8867\nUSA|Northeast|RI|Rhode Island|Providence|41.8240|-71.4128\nUSA|Southeast|SC|South Carolina|Columbia|34.0007|-81.0348\nUSA|Great Plains|SD|South Dakota|Pierre|44.3683|-100.3510\nUSA|Southeast|TN|Tennessee|Nashville|36.1627|-86.7816\nUSA|South Central|TX|Texas|Austin|30.2672|-97.7431\nUSA|Mountain West|UT|Utah|Salt Lake City|40.7608|-111.8910\nUSA|Northeast|VT|Vermont|Montpelier|44.2601|-72.5754\nUSA|Mid-Atlantic|VA|Virginia|Richmond|37.5407|-77.4360\nUSA|Pacific|WA|Washington|Olympia|47.0379|-122.9007\nUSA|Mid-Atlantic|WV|West Virginia|Charleston|38.3498|-81.6326\nUSA|Midwest|WI|Wisconsin|Madison|43.0731|-89.4012\nUSA|Mountain West|WY|Wyoming|Cheyenne|41.1400|-104.8202\nCanada|Central|QC|Quebec|Montréal|45.5019|-73.5674\nCanada|Pacific|BC|British Columbia|Vancouver|49.2827|-123.1207\nCanada|Prairies|AB|Alberta|Calgary|51.0447|-114.0719\nUSA|Northeast|NY|New York|New York City|40.7128|-74.0060\nUSA|Pacific|CA|California|Los Angeles|34.0522|-118.2437\nUSA|Midwest|IL|Illinois|Chicago|41.8781|-87.6298\nUSA|Southeast|FL|Florida|Miami|25.7617|-80.1918\nUSA|Pacific|WA|Washington|Seattle|47.6062|-122.3321\n"
+
+def regional_catalog():
+    result = []
+    for i, line in enumerate(REGIONAL_POINTS.strip().splitlines()):
+        country, region, code, division, city, lat, lon = line.split('|')
+        result.append(dict(id=f'temp-{i+1:02}', country=country, region=region,
+                           code=code, division=division, city=city, lat=float(lat), lon=float(lon)))
+    return result
+
+
+def load_regional_batch(points):
+    params = {'latitude': ','.join(str(p['lat']) for p in points),
+              'longitude': ','.join(str(p['lon']) for p in points),
+              'current': 'temperature_2m,apparent_temperature',
+              'daily': 'temperature_2m_min,temperature_2m_max',
+              'temperature_unit': 'celsius', 'timezone': 'auto', 'forecast_days': 14}
+    req = Request(API + '?' + urlencode(params), headers={'User-Agent': 'AlpineDashboard/5 (personal noncommercial weather tracker)', 'Accept': 'application/json'})
+    for attempt in range(2):
+        try:
+            with urlopen(req, timeout=40) as response:
+                data = json.load(response)
+            if isinstance(data, dict) and data.get('error'):
+                raise ValueError(data.get('reason', 'API error'))
+            if isinstance(data, dict) and len(points) == 1:
+                data = [data]
+            if not isinstance(data, list) or len(data) != len(points):
+                raise ValueError('Unexpected regional response count')
+            return data
+        except (HTTPError, URLError, TimeoutError) as exc:
+            if attempt or (isinstance(exc, HTTPError) and 400 <= exc.code < 500 and exc.code != 429):
+                raise
+            delay = retry_delay(exc, attempt) if isinstance(exc, HTTPError) and exc.code == 429 else 10
+            if delay > 120:
+                raise
+            time.sleep(delay)
+
+
+def extract_regional(point, payload, now):
+    current, daily = payload.get('current', {}), payload.get('daily', {})
+    if payload.get('current_units', {}).get('temperature_2m') != '°C' or payload.get('daily_units', {}).get('temperature_2m_max') != '°C' or payload.get('daily_units', {}).get('temperature_2m_min') != '°C':
+        raise ValueError('Unexpected temperature unit')
+    t = rounded(numeric(current.get('temperature_2m')))
+    if t is None:
+        raise ValueError('Missing current temperature')
+    dates, lows, highs = (daily.get(k, []) for k in ('time', 'temperature_2m_min', 'temperature_2m_max'))
+    if not (len(dates) == len(lows) == len(highs)):
+        raise ValueError('Mismatched daily arrays')
+    forecast = [dict(date=date, low_c=rounded(numeric(low)), high_c=rounded(numeric(high))) for date, low, high in zip(dates, lows, highs)]
+    return {**point, 'temperature_c': t, 'feels_like_c': rounded(numeric(current.get('apparent_temperature'))),
+            'sample_local': current.get('time'), 'timezone': payload.get('timezone'), 'fetched_at': iso_utc(now), 'daily': forecast, 'error': None}
+
+
+def collect_regional(now, previous):
+    points = regional_catalog()
+    old = {p['id']: p for p in previous if isinstance(p, dict) and 'id' in p}
+    records = []
+    def failed(point, exc):
+        prior = old.get(point['id'], {})
+        return {**point, **{k: prior.get(k) for k in ('temperature_c','feels_like_c','sample_local','timezone','fetched_at','daily')}, 'error': str(exc)}
+    for offset in range(0, len(points), BATCH_SIZE):
+        batch = points[offset:offset+BATCH_SIZE]
+        try:
+            payload = load_regional_batch(batch)
+        except (ValueError, KeyError, IndexError, TypeError, HTTPError, URLError, TimeoutError) as exc:
+            records.extend(failed(p, exc) for p in batch)
+            if isinstance(exc, HTTPError) and exc.code == 429:
+                records.extend(failed(p, 'Rate limited; not requested') for p in points[offset+len(batch):])
+                break
+        else:
+            for point, raw in zip(batch, payload):
+                try:
+                    records.append(extract_regional(point, raw, now))
+                except (ValueError, KeyError, IndexError, TypeError) as exc:
+                    records.append(failed(point, exc))
+        if offset + len(batch) < len(points):
+            time.sleep(BATCH_PAUSE_SECONDS)
+    print(f'Regional temperatures: {sum(p["error"] is None for p in records)}/{len(points)} successful', flush=True)
+    return records
+
+
 def main():
     now = datetime.now(timezone.utc)
     end_hour = now.replace(minute=0, second=0, microsecond=0) - timedelta(hours=1)
@@ -1364,8 +1445,16 @@ def main():
         print("No zones succeeded; keeping the last good files and failing this run.", file=sys.stderr)
         return 1
 
+    try:
+        previous = json.loads(DATA_FILE.read_text(encoding="utf-8")).get("temperature_regions", [])
+    except (OSError, ValueError, AttributeError):
+        previous = []
+    time.sleep(BATCH_PAUSE_SECONDS)
+    temperatures = collect_regional(datetime.now(timezone.utc), previous)
     document = {
-        "schema_version": 4,
+        "schema_version": 5,
+        "temperature_regions": temperatures,
+        "temperature_source": "Open-Meteo city-point model estimates; local calendar days; not regional averages.",
         "generated_at": iso_utc(now),
         "reference_time_utc": iso_utc(end_hour),
         "source": "Open-Meteo Forecast API (modeled / interpolated data, not station observations)",
